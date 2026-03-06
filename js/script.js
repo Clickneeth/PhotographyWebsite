@@ -14,6 +14,11 @@ for (let i = 52; i <= 54; i++) {
     imageFiles.push(`${i}.jpeg`);
 }
 
+// new images added manually
+imageFiles.push("60.jpg");
+imageFiles.push("61.jpg");
+imageFiles.push("62.jpg");
+
 const gallery = document.getElementById("galleryGrid");
 
 // ===============================
@@ -21,6 +26,7 @@ const gallery = document.getElementById("galleryGrid");
 // ===============================
 
 imageFiles.forEach(file => {
+
     const item = document.createElement("div");
     item.classList.add("gallery-item");
 
@@ -30,6 +36,7 @@ imageFiles.forEach(file => {
 
     item.appendChild(img);
     gallery.appendChild(item);
+
 });
 
 // ===============================
@@ -37,11 +44,13 @@ imageFiles.forEach(file => {
 // ===============================
 
 const observer = new IntersectionObserver(entries => {
+
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add("show");
         }
     });
+
 }, { threshold: 0.1 });
 
 document.querySelectorAll(".gallery-item").forEach(item => {
@@ -63,35 +72,45 @@ let currentIndex = 0;
 
 // Open modal
 images.forEach((img, index) => {
+
     img.addEventListener("click", () => {
+
         modal.style.display = "flex";
         modalImg.src = img.src;
         currentIndex = index;
+
     });
+
 });
 
-// Close
+// Close modal
 closeBtn.onclick = () => {
     modal.style.display = "none";
 };
 
-// Next
+// Next image
 nextBtn.onclick = () => {
+
     currentIndex = (currentIndex + 1) % images.length;
     modalImg.src = images[currentIndex].src;
+
 };
 
-// Previous
+// Previous image
 prevBtn.onclick = () => {
+
     currentIndex = (currentIndex - 1 + images.length) % images.length;
     modalImg.src = images[currentIndex].src;
+
 };
 
 // Close when clicking outside image
 modal.addEventListener("click", (e) => {
+
     if (e.target === modal) {
         modal.style.display = "none";
     }
+
 });
 
 // ===============================
@@ -99,22 +118,29 @@ modal.addEventListener("click", (e) => {
 // ===============================
 
 document.addEventListener("keydown", (e) => {
+
     if (modal.style.display === "flex") {
 
         if (e.key === "ArrowRight") {
+
             currentIndex = (currentIndex + 1) % images.length;
             modalImg.src = images[currentIndex].src;
+
         }
 
         if (e.key === "ArrowLeft") {
+
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             modalImg.src = images[currentIndex].src;
+
         }
 
         if (e.key === "Escape") {
             modal.style.display = "none";
         }
+
     }
+
 });
 
 // ===============================

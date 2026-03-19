@@ -52,7 +52,7 @@ body {
 /* ================= GALLERY ================= */
 
 .gallery {
-    padding: 50px 4%;
+    padding: 40px 3%;
     background: #fff;
 }
 
@@ -85,18 +85,23 @@ body {
     transform: scale(1.03);
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
 
+/* Tablet */
 @media (max-width: 1200px) {
     .gallery-grid { column-count: 3; }
 }
 
+/* Mobile (IMPORTANT CHANGE HERE) */
 @media (max-width: 768px) {
-    .gallery-grid { column-count: 2; }
-}
+    .gallery-grid {
+        column-count: 2;   /* 🔥 keeps masonry layout */
+        column-gap: 10px;
+    }
 
-@media (max-width: 480px) {
-    .gallery-grid { column-count: 1; }
+    .gallery-item {
+        margin-bottom: 10px;
+    }
 }
 
 /* ================= FEEDBACK ================= */

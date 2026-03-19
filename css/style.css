@@ -13,13 +13,14 @@ body {
 /* ================= HERO ================= */
 
 .hero {
-    height: 55vh;
+    min-height: 60vh;   /* 🔥 FIXED (not fixed height) */
     background: #000;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 40px 20px;   /* 🔥 prevents clipping */
 }
 
 .hero-content {
@@ -45,6 +46,7 @@ body {
     margin-top: 20px;
     font-size: 14px;
     opacity: 0.7;
+    line-height: 1.6;
 }
 
 /* ================= GALLERY ================= */
@@ -54,7 +56,7 @@ body {
     background: #fff;
 }
 
-/* 🔥 ORIGINAL MASONRY (RESTORED) */
+/* MASONRY */
 .gallery-grid {
     column-count: 4;
     column-gap: 16px;
@@ -75,7 +77,7 @@ body {
 
 .gallery-item img {
     width: 100%;
-    height: auto;   /* 🔥 NO CROPPING */
+    height: auto;
     display: block;
     border-radius: 14px;
     cursor: pointer;
@@ -98,7 +100,7 @@ body {
 /* Mobile */
 @media (max-width: 768px) {
     .gallery-grid {
-        column-count: 2;   /* 🔥 FIXED */
+        column-count: 2;
         column-gap: 12px;
     }
 
@@ -112,7 +114,7 @@ body {
 .feedback {
     background: #000;
     color: white;
-    padding: 100px 20px;
+    padding: 80px 20px;   /* 🔥 FIXED spacing */
     text-align: center;
 }
 
@@ -122,8 +124,8 @@ body {
 }
 
 .feedback h2 {
-    font-size: 28px;
-    letter-spacing: 3px;
+    font-size: 26px;
+    letter-spacing: 2px;
     margin-bottom: 20px;
     font-weight: 300;
 }
@@ -131,19 +133,19 @@ body {
 .feedback p {
     font-size: 14px;
     opacity: 0.7;
-    margin-bottom: 35px;
+    margin-bottom: 30px;
     line-height: 1.6;
 }
 
 .feedback-btn {
     display: inline-block;
-    padding: 14px 40px;
+    padding: 12px 35px;
     border: 1px solid white;
     text-decoration: none;
     color: white;
     letter-spacing: 2px;
     font-size: 13px;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .feedback-btn:hover {
@@ -166,15 +168,14 @@ body {
 .modal-content {
     max-width: 85%;
     max-height: 85%;
-    transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
 .close {
     position: absolute;
-    top: 25px;
-    right: 40px;
+    top: 20px;
+    right: 35px;
     color: white;
-    font-size: 32px;
+    font-size: 30px;
     cursor: pointer;
 }
 
@@ -183,21 +184,19 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: white;
-    font-size: 40px;
+    font-size: 35px;
     cursor: pointer;
-    user-select: none;
     padding: 10px;
 }
 
-#prev { left: 30px; }
-#next { right: 30px; }
+#prev { left: 20px; }
+#next { right: 20px; }
 
 .signature {
     position: absolute;
-    bottom: 25px;
-    right: 35px;
+    bottom: 20px;
+    right: 25px;
     color: white;
-    font-size: 13px;
-    letter-spacing: 3px;
+    font-size: 12px;
     opacity: 0.6;
 }

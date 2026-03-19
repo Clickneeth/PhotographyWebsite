@@ -20,7 +20,6 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    overflow: hidden;
 }
 
 .hero-content {
@@ -45,28 +44,28 @@ body {
 .tagline {
     margin-top: 20px;
     font-size: 14px;
-    letter-spacing: 1px;
     opacity: 0.7;
 }
 
 /* ================= GALLERY ================= */
 
 .gallery {
-    padding: 40px 3%;
-    background: #fff;
+    padding: 30px 3%;
 }
 
+/* GRID SYSTEM */
 .gallery-grid {
-    column-count: 4;
-    column-gap: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
 }
 
 .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 14px;
+    overflow: hidden;
+    border-radius: 14px;
     opacity: 0;
-    transform: translateY(25px);
-    transition: all 0.6s ease;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
 }
 
 .gallery-item.show {
@@ -76,31 +75,30 @@ body {
 
 .gallery-item img {
     width: 100%;
-    border-radius: 14px;
+    height: 100%;
+    object-fit: cover;
     cursor: pointer;
     transition: transform 0.4s ease;
 }
 
 .gallery-item img:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 /* ================= RESPONSIVE ================= */
 
 /* Tablet */
 @media (max-width: 1200px) {
-    .gallery-grid { column-count: 3; }
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-/* Mobile (IMPORTANT CHANGE HERE) */
+/* Mobile */
 @media (max-width: 768px) {
     .gallery-grid {
-        column-count: 2;   /* 🔥 keeps masonry layout */
-        column-gap: 10px;
-    }
-
-    .gallery-item {
-        margin-bottom: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 }
 
@@ -120,7 +118,6 @@ body {
 
 .feedback h2 {
     font-size: 28px;
-    letter-spacing: 3px;
     margin-bottom: 20px;
     font-weight: 300;
 }
@@ -128,19 +125,16 @@ body {
 .feedback p {
     font-size: 14px;
     opacity: 0.7;
-    margin-bottom: 35px;
-    line-height: 1.6;
+    margin-bottom: 30px;
 }
 
 .feedback-btn {
     display: inline-block;
-    padding: 14px 40px;
+    padding: 12px 35px;
     border: 1px solid white;
     text-decoration: none;
     color: white;
-    letter-spacing: 2px;
-    font-size: 13px;
-    transition: all 0.4s ease;
+    transition: 0.3s;
 }
 
 .feedback-btn:hover {
@@ -153,50 +147,46 @@ body {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    padding-top: 40px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0,0,0,0.95);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
     max-width: 85%;
     max-height: 85%;
+    transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
 .close {
     position: absolute;
-    top: 25px;
-    right: 40px;
+    top: 20px;
+    right: 35px;
     color: white;
-    font-size: 32px;
+    font-size: 30px;
     cursor: pointer;
 }
 
 .arrow {
     position: absolute;
     top: 50%;
+    transform: translateY(-50%);
     color: white;
-    font-size: 40px;
+    font-size: 35px;
     cursor: pointer;
-    user-select: none;
     padding: 10px;
 }
 
-#prev { left: 30px; }
-#next { right: 30px; }
+#prev { left: 20px; }
+#next { right: 20px; }
 
 .signature {
     position: absolute;
-    bottom: 25px;
-    right: 35px;
+    bottom: 20px;
+    right: 25px;
     color: white;
-    font-size: 13px;
-    letter-spacing: 3px;
+    font-size: 12px;
     opacity: 0.6;
 }

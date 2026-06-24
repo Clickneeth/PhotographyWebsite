@@ -4,21 +4,9 @@
 
 const imageFiles = [];
 
-// 1 → 51 are .jpg
-for (let i = 1; i <= 51; i++) {
+for (let i = 1; i <= 65; i++) {
     imageFiles.push(`${i}.jpg`);
 }
-
-// 52 → 54 are .jpeg
-for (let i = 52; i <= 54; i++) {
-    imageFiles.push(`${i}.jpeg`);
-}
-
-// new images added manually
-imageFiles.push("60.jpg");
-imageFiles.push("61.jpg");
-imageFiles.push("62.jpg");
-
 const gallery = document.getElementById("galleryGrid");
 
 // ===============================

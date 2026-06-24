@@ -4,7 +4,7 @@
 
 const imageFiles = [];
 
-for (let i = 1; i <= 65; i++) {
+for (let i = 1; i <= 60; i++) {
     imageFiles.push(`${i}.jpg`);
 }
 const gallery = document.getElementById("galleryGrid");

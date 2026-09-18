@@ -1,135 +1,153 @@
 // ===============================
-// IMAGE LIST
+// LOAD IMAGES (from gallery.json)
 // ===============================
 
-const imageFiles = [];
-
-for (let i = 1; i <= 60; i++) {
-    imageFiles.push(`${i}.jpg`);
-}
 const gallery = document.getElementById("galleryGrid");
+let galleryData = [];
 
-// ===============================
-// LOAD IMAGES
-// ===============================
+fetch("gallery.json")
+    .then(res => res.json())
+    .then(data => {
+        galleryData = data;
+        renderGallery();
+        setupModal();
+    })
+    .catch(err => console.error("Failed to load gallery.json:", err));
 
-imageFiles.forEach(file => {
+function renderGallery() {
 
-    const item = document.createElement("div");
-    item.classList.add("gallery-item");
+    galleryData.forEach(entry => {
 
-    const img = document.createElement("img");
-    img.src = `assets/${file}`;
-    img.loading = "lazy";
+        const item = document.createElement("div");
+        item.classList.add("gallery-item");
 
-    item.appendChild(img);
-    gallery.appendChild(item);
+        const img = document.createElement("img");
+        img.src = `assets/${entry.file}`;
+        img.loading = "lazy";
+        // alt text only (accessibility/SEO) — no title attribute, so no hover
+        // tooltip leaks the caption in the normal grid view.
+        img.alt = entry.caption || "";
 
-});
+        item.appendChild(img);
+        gallery.appendChild(item);
 
-// ===============================
-// SCROLL FADE
-// ===============================
-
-const observer = new IntersectionObserver(entries => {
-
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-        }
     });
 
-}, { threshold: 0.1 });
+    const observer = new IntersectionObserver(entries => {
 
-document.querySelectorAll(".gallery-item").forEach(item => {
-    observer.observe(item);
-});
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+            }
+        });
+
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".gallery-item").forEach(item => {
+        observer.observe(item);
+    });
+
+}
 
 // ===============================
 // MODAL SYSTEM
 // ===============================
 
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modalImg");
-const closeBtn = document.querySelector(".close");
-const nextBtn = document.getElementById("next");
-const prevBtn = document.getElementById("prev");
+function setupModal() {
 
-let images = document.querySelectorAll(".gallery-item img");
-let currentIndex = 0;
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalLocation = document.getElementById("modalLocation");
+    const modalCaptionText = document.getElementById("modalCaptionText");
+    const closeBtn = document.querySelector(".close");
+    const nextBtn = document.getElementById("next");
+    const prevBtn = document.getElementById("prev");
 
-// Open modal
-images.forEach((img, index) => {
+    let images = document.querySelectorAll(".gallery-item img");
+    let currentIndex = 0;
 
-    img.addEventListener("click", () => {
+    function updateArrows() {
+        prevBtn.classList.toggle("hidden", currentIndex === 0);
+        nextBtn.classList.toggle("hidden", currentIndex === images.length - 1);
+    }
 
-        modal.style.display = "flex";
-        modalImg.src = img.src;
+    function show(index) {
+        // No wrap-around: past the first/last photo, simply do nothing —
+        // this is also why swiping past either end just stays put instead
+        // of jumping to the other side of the gallery.
+        if (index < 0 || index >= images.length) return;
+
         currentIndex = index;
+        modalImg.src = images[currentIndex].src;
+
+        const entry = galleryData[currentIndex];
+        if (modalLocation) modalLocation.textContent = entry?.location || "";
+        if (modalCaptionText) modalCaptionText.textContent = entry?.caption || "";
+
+        updateArrows();
+    }
+
+    images.forEach((img, index) => {
+        img.addEventListener("click", () => {
+            modal.style.display = "flex";
+            show(index);
+        });
+    });
+
+    closeBtn.onclick = () => {
+        modal.style.display = "none";
+    };
+
+    nextBtn.onclick = () => show(currentIndex + 1);
+    prevBtn.onclick = () => show(currentIndex - 1);
+
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+
+        if (modal.style.display === "flex") {
+
+            if (e.key === "ArrowRight") show(currentIndex + 1);
+            if (e.key === "ArrowLeft") show(currentIndex - 1);
+            if (e.key === "Escape") modal.style.display = "none";
+
+        }
 
     });
 
-});
+    // ===============================
+    // CLEAN SWIPE (MOBILE ONLY)
+    // ===============================
 
-// Close modal
-closeBtn.onclick = () => {
-    modal.style.display = "none";
-};
+    let startX = 0;
 
-// Next image
-nextBtn.onclick = () => {
+    modalImg.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+    }, { passive: true });
 
-    currentIndex = (currentIndex + 1) % images.length;
-    modalImg.src = images[currentIndex].src;
+    modalImg.addEventListener("touchend", (e) => {
 
-};
+        let endX = e.changedTouches[0].clientX;
+        let diff = startX - endX;
 
-// Previous image
-prevBtn.onclick = () => {
+        // small threshold to avoid accidental taps
+        if (Math.abs(diff) < 50) return;
 
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    modalImg.src = images[currentIndex].src;
-
-};
-
-// Close when clicking outside image
-modal.addEventListener("click", (e) => {
-
-    if (e.target === modal) {
-        modal.style.display = "none";
-    }
-
-});
-
-// ===============================
-// KEYBOARD NAVIGATION
-// ===============================
-
-document.addEventListener("keydown", (e) => {
-
-    if (modal.style.display === "flex") {
-
-        if (e.key === "ArrowRight") {
-
-            currentIndex = (currentIndex + 1) % images.length;
-            modalImg.src = images[currentIndex].src;
-
+        if (diff > 0) {
+            // Swipe LEFT → NEXT
+            show(currentIndex + 1);
+        } else {
+            // Swipe RIGHT → PREVIOUS
+            show(currentIndex - 1);
         }
 
-        if (e.key === "ArrowLeft") {
+    }, { passive: true });
 
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            modalImg.src = images[currentIndex].src;
-
-        }
-
-        if (e.key === "Escape") {
-            modal.style.display = "none";
-        }
-
-    }
-
-});
+}
 
 // ===============================
 // DISABLE RIGHT CLICK

@@ -1,0 +1,347 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gate {
+    width: 100%;
+    max-width: 380px;
+    padding: 40px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* ================= MASCOT STAGE (Pikachu-style, fan art — Pokémon property) ================= */
+
+.mascot-stage {
+    position: relative;
+    width: 190px;
+    height: 216px;
+    margin-bottom: 20px;
+}
+
+.mascot-stage::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(253, 210, 60, 0.22) 0%, rgba(253, 210, 60, 0) 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.mascot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: idleBounce 2.6s ease-in-out infinite;
+}
+
+@keyframes idleBounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-7px) rotate(-1.2deg); }
+}
+
+/* ---- base fills / strokes ---- */
+
+.mascot .pika-body,
+.mascot .pika-head,
+.mascot .pika-ear-yellow,
+.mascot .pika-foot,
+.mascot .pika-arm path:not(.finger-lines),
+.mascot .pika-tail-yellow,
+.mascot .pika-leg-left,
+.mascot .pika-leg-right {
+    fill: #FDD23C;
+    stroke: #171614;
+    stroke-width: 4.5px;
+    stroke-linejoin: round;
+}
+
+.mascot .finger-lines {
+    fill: none;
+    stroke: #171614;
+    stroke-width: 3px;
+    stroke-linecap: round;
+}
+
+.mascot .pika-ear-tip,
+.mascot .pika-stripe {
+    fill: #171614;
+}
+
+.mascot .pika-tail-brown {
+    fill: #7A4B22;
+    stroke: #171614;
+    stroke-width: 4.5px;
+    stroke-linejoin: round;
+}
+
+.mascot .pika-stripe {
+    fill: #7A4B22;
+}
+
+.mascot .pika-cheek {
+    fill: #F1462F;
+}
+
+.mascot .eye-normal,
+.mascot .pika-nose {
+    fill: #171614;
+}
+
+.mascot .eye-highlight {
+    fill: #fff;
+}
+
+.mascot .eye-happy {
+    fill: none;
+    stroke: #171614;
+    stroke-width: 3.4px;
+    stroke-linecap: round;
+    opacity: 0;
+}
+
+.mascot .pika-mouth-open {
+    fill: #171614;
+}
+
+.mascot .pika-mouth-inner {
+    fill: #E8453B;
+}
+
+/* ---- idle micro-motion: tail sway + ear twitch ---- */
+
+.pika-tail {
+    transform-box: fill-box;
+    transform-origin: 24% 89%;
+    animation: tailSway 3.2s ease-in-out infinite;
+}
+
+@keyframes tailSway {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(5deg); }
+}
+
+.pika-ear {
+    transform-box: fill-box;
+    animation: earTwitch 4.8s ease-in-out infinite;
+}
+
+.pika-ear.left { transform-origin: 90% 100%; }
+.pika-ear.right { transform-origin: 5% 100%; animation-delay: 0.3s; }
+
+@keyframes earTwitch {
+    0%, 85%, 100% { transform: rotate(0deg); }
+    90% { transform: rotate(-6deg); }
+    95% { transform: rotate(3deg); }
+}
+
+/* ---- blink ---- */
+
+.pika-eye {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: blink 4.4s ease-in-out infinite;
+}
+
+.pika-eye.right { animation-delay: 0.06s; }
+
+@keyframes blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+    97% { transform: scaleY(1); }
+}
+
+/* ---- happy state, triggered on successful submit ---- */
+
+.mascot.happy {
+    animation: celebrate 0.9s ease-in-out 2;
+}
+
+@keyframes celebrate {
+    0%   { transform: translateY(0) rotate(0deg); }
+    30%  { transform: translateY(-20px) rotate(-6deg); }
+    55%  { transform: translateY(-4px) rotate(4deg); }
+    75%  { transform: translateY(-13px) rotate(-3deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+.mascot.happy .pika-eye {
+    animation: none;
+    transform: none;
+}
+
+.mascot.happy .eye-inner { opacity: 0; }
+.mascot.happy .eye-happy { opacity: 1; }
+
+.mascot.happy .pika-ear {
+    animation: none;
+}
+.mascot.happy .pika-ear.left { transform: rotate(-10deg); }
+.mascot.happy .pika-ear.right { transform: rotate(10deg); }
+
+.mascot.happy .pika-tail {
+    animation: tailWagFast 0.3s ease-in-out infinite;
+}
+
+@keyframes tailWagFast {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+}
+
+.pika-arm {
+    transform-box: fill-box;
+    transition: transform 0.4s ease;
+}
+
+.pika-arm.left { transform-origin: 78% 5%; }
+.pika-arm.right { transform-origin: 2% 74%; }
+
+.mascot.happy .pika-arm.left { transform: rotate(-50deg); }
+.mascot.happy .pika-arm.right { transform: rotate(-25deg); }
+
+/* ---- checking state, while the email domain is being verified ---- */
+
+.mascot.checking .eye-inner {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: lookAround 1.1s ease-in-out infinite;
+}
+
+@keyframes lookAround {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+}
+
+/* ---- sparkle burst ---- */
+
+.sparkle-field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.sparkle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background: #FDD23C;
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkleOut 0.9s ease-out forwards;
+}
+
+@keyframes sparkleOut {
+    0%   { opacity: 1; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-70px) scale(0.4); }
+}
+
+/* ================= CAPTION ================= */
+
+.caption {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.8;
+    min-height: 44px;
+    margin-bottom: 28px;
+    transition: opacity 0.3s ease;
+}
+
+/* ================= FORM ================= */
+
+.gate-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.gate-form.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.field span {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    padding: 8px 2px;
+    outline: none;
+    transition: border-color 0.25s ease;
+}
+
+.field input:focus {
+    border-color: #f4b942;
+}
+
+.gate-btn {
+    margin-top: 10px;
+    padding: 13px 20px;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gate-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.gate-form.done .field,
+.gate-form.done .gate-btn {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.error {
+    min-height: 16px;
+    font-size: 12px;
+    color: #e0836f;
+}

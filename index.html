@@ -3,55 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clickneeth</title>
+<title>Clickneeth — Welcome</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-content">
-        <h1 class="logo">CLICKNEETH</h1>
-        <p class="tagline">
-            I don't click photos for fun.<br>
-            I capture memories — mine and yours — frozen in time.
-        </p>
-    </div>
-</section>
+<main class="gate">
 
-<!-- GALLERY -->
-<section class="gallery">
-    <div class="gallery-grid" id="galleryGrid"></div>
-</section>
+  <div class="mascot-stage">
+    <svg id="mascot" class="mascot" viewBox="0 0 220 250" aria-hidden="true">
+      <g transform="translate(-20,22)">
 
-<!-- FEEDBACK SECTION -->
-<section class="feedback">
-    <div class="feedback-content">
-        <h2>Enjoyed the experience?</h2>
-        <p>
-            Your feedback means a lot.<br>
-            Help me grow by sharing your thoughts.
-        </p>
+        <g class="pika-tail">
+          <path class="pika-tail-yellow" d="M140,175 L168,183 L158,150 L192,158 L174,118 L204,112 L172,108 L150,128 L128,120 L138,148 L120,138 Z"/>
+          <path class="pika-tail-brown" d="M140,175 C130,163 124,146 126,126 L138,148 L142,164 C141,169 140,172 140,175 Z"/>
+        </g>
 
-        <a href="https://forms.gle/3zFcycshN3RBdcgC6"
-           target="_blank"
-           class="feedback-btn">
-            Leave Feedback
-        </a>
-    </div>
-</section>
+        <path class="pika-leg-left" d="M93,168 C79,170 70,184 70,204 C70,213 79,216 88,214 C95,212 97,199 96,186 C95,179 94,173 93,168 Z"/>
+        <ellipse class="pika-foot" cx="78" cy="213" rx="20" ry="12"/>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-    <span class="close">&times;</span>
-    <span class="arrow" id="prev">&#10094;</span>
-    <img class="modal-content" id="modalImg">
-    <div class="signature">© CLICKNEETH</div>
-    <span class="arrow" id="next">&#10095;</span>
-</div>
+        <path class="pika-leg-right" d="M132,166 C144,166 156,174 160,186 C163,195 158,203 148,204 C140,205 133,197 130,187 C128,180 129,172 132,166 Z"/>
+        <ellipse class="pika-foot" cx="149" cy="203" rx="19" ry="11.5" transform="rotate(16 149 203)"/>
 
-<script src="js/script.js"></script>
+        <path class="pika-body" d="M85,172 C68,172 65,136 78,114 C92,100 138,100 152,114 C165,136 162,172 145,172 Z"/>
+
+        <path class="pika-stripe" d="M129,140 Q147,142 149,158 Q133,156 127,144 Z"/>
+
+        <g class="pika-arm left">
+          <path d="M84,126 C66,121 50,130 49,150 C49,156 53,158 57,156 C68,149 78,141 88,136 Z"/>
+        </g>
+        <g class="pika-arm right">
+          <path d="M150,118 C168,110 186,102 198,94 C205,90 211,94 209,101 C206,109 194,116 178,124 C169,128 158,127 150,124 Z"/>
+          <path class="finger-lines" d="M198,94 C203,89 210,90 210,96 M201,99 C206,95 212,97 211,102 M202,105 C207,102 212,105 210,110"/>
+        </g>
+
+        <g class="pika-ear left">
+          <path class="pika-ear-yellow" d="M94,40 C82,20 68,-2 61,-14 C72,-21 85,-18 91,-8 C98,8 102,26 104,38 Z"/>
+          <path class="pika-ear-tip" d="M61,-14 C72,-21 85,-18 91,-8 C93,-4 95,0 97,4 C87,3 76,-1 69,-6 C66,-9 63,-11 61,-14 Z"/>
+        </g>
+        <g class="pika-ear right">
+          <path class="pika-ear-yellow" d="M136,40 C144,18 152,-6 156,-20 C168,-15 176,-4 172,8 C167,22 152,34 140,42 Z"/>
+          <path class="pika-ear-tip" d="M156,-20 C168,-15 176,-4 172,8 C170,14 168,18 165,23 C160,13 156,0 154,-10 C154,-14 155,-17 156,-20 Z"/>
+        </g>
+
+        <circle class="pika-head" cx="115" cy="74" r="46"/>
+
+        <circle class="pika-cheek" cx="84" cy="92" r="11"/>
+        <circle class="pika-cheek" cx="146" cy="92" r="11"/>
+
+        <g class="pika-eye left">
+          <g class="eye-inner">
+            <circle class="eye-normal" cx="98" cy="68" r="8.5"/>
+            <circle class="eye-highlight" cx="101" cy="64" r="2.6"/>
+          </g>
+          <path class="eye-happy" d="M91,68 Q98,60 105,68" />
+        </g>
+        <g class="pika-eye right">
+          <g class="eye-inner">
+            <circle class="eye-normal" cx="132" cy="68" r="8.5"/>
+            <circle class="eye-highlight" cx="135" cy="64" r="2.6"/>
+          </g>
+          <path class="eye-happy" d="M125,68 Q132,60 139,68" />
+        </g>
+
+        <circle class="pika-nose" cx="112" cy="80" r="1.5"/>
+        <circle class="pika-nose" cx="118" cy="80" r="1.5"/>
+
+        <path class="pika-mouth-open" d="M99,88 Q107,81 115,85 Q123,81 131,88 Q129,101 115,105 Q101,101 99,88 Z"/>
+        <path class="pika-mouth-inner" d="M104,91 Q115,99 126,91 Q124,98 115,101 Q106,98 104,91 Z"/>
+
+      </g>
+    </svg>
+    <div class="sparkle-field" id="sparkleField"></div>
+  </div>
+
+  <p class="caption" id="caption" aria-live="polite">Blip wants to know who you are.</p>
+
+  <form class="gate-form" id="gateForm" novalidate>
+    <label class="field">
+      <span>Name</span>
+      <input type="text" id="visitorName" name="name" autocomplete="name" required>
+    </label>
+    <label class="field">
+      <span>Email</span>
+      <input type="email" id="visitorEmail" name="email" autocomplete="email" required>
+    </label>
+    <button type="submit" class="gate-btn">Introduce yourself</button>
+    <p class="error" id="formError" aria-live="assertive"></p>
+  </form>
+
+</main>
+
+<script src="js/login.js"></script>
 </body>
 </html>

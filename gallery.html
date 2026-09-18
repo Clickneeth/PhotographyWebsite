@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clickneeth</title>
+<script>
+    // Gate: send first-time visitors to Blip before they see the gallery.
+    // (login page is now the site's index.html itself, not a separate file)
+    if (!localStorage.getItem("clickneeth_visitor")) {
+        window.location.replace("index.html");
+    }
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="logo">CLICKNEETH</h1>
+        <p class="tagline">
+            I don't click photos for fun.<br>
+            I capture memories — mine and yours — frozen in time.
+        </p>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+    <div class="about-content">
+        <p>
+            I remember the exact minute I recognised it, my passion in life. When doubts crept
+            into me as a teenager, when the world held questions in every corner about my place
+            in it, they were answered with a click that resonated in my heart through my
+            father's phone. I found my answer, the search was over.
+        </p>
+        <p>
+            What began as entertainment moulded itself into my passion — the one that perfects
+            me, and the one I strive to perfect. Photography was an interest, photography was a
+            passion, photography is now my identity.
+        </p>
+        <p class="about-signature">I'm Shankar Praneeth.</p>
+    </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+    <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- FEEDBACK SECTION -->
+<section class="feedback">
+    <div class="feedback-content">
+        <h2>Enjoyed the experience?</h2>
+        <p>
+            Your feedback means a lot.<br>
+            Help me grow by sharing your thoughts.
+        </p>
+
+        <a href="https://forms.gle/3zFcycshN3RBdcgC6"
+           target="_blank"
+           class="feedback-btn">
+            Leave Feedback
+        </a>
+    </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <span class="close">&times;</span>
+    <span class="arrow" id="prev">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </span>
+    <div class="modal-inner">
+        <img class="modal-content" id="modalImg">
+        <div class="modal-caption" id="modalCaption">
+            <div class="modal-location" id="modalLocation"></div>
+            <p class="modal-caption-text" id="modalCaptionText"></p>
+        </div>
+    </div>
+    <div class="signature">© CLICKNEETH</div>
+    <span class="arrow" id="next">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </span>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

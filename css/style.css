@@ -15,7 +15,7 @@ body {
 .hero {
     min-height: 60vh;   /* 🔥 FIXED (not fixed height) */
     background: #000;
-    color: white;
+    color: silver;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,13 +40,47 @@ body {
     font-size: 42px;
     letter-spacing: 12px;
     font-weight: 300;
+    color: silver;
 }
 
 .tagline {
     margin-top: 20px;
     font-size: 14px;
+    color: silver;
     opacity: 0.7;
     line-height: 1.6;
+}
+
+/* ================= ABOUT ================= */
+
+.about {
+    padding: 90px 20px;
+    background: #000;
+    text-align: center;
+}
+
+.about-content {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.about-content p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: silver;
+    opacity: 0.85;
+    margin-bottom: 24px;
+}
+
+.about-signature {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: silver;
+    opacity: 1;
 }
 
 /* ================= GALLERY ================= */
@@ -163,11 +197,22 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 60px 20px;
+}
+
+.modal-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .modal-content {
-    max-width: 85%;
-    max-height: 85%;
+    display: block;
+    max-width: 85vw;
+    max-height: 70vh;
+    border-radius: 4px;
 }
 
 .close {
@@ -183,14 +228,59 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: white;
-    font-size: 35px;
     cursor: pointer;
-    padding: 10px;
+    opacity: 0.6;
+    transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease;
+}
+
+.arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: white;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.arrow:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-50%) scale(1.06);
+}
+
+/* No wrap-around: hide the arrow entirely at either end of the gallery */
+.arrow.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 #prev { left: 20px; }
 #next { right: 20px; }
+
+@media (max-width: 768px) {
+    .arrow {
+        width: 36px;
+        height: 36px;
+    }
+
+    .arrow svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    #prev { left: 10px; }
+    #next { right: 10px; }
+}
 
 .signature {
     position: absolute;
@@ -200,32 +290,41 @@ body {
     font-size: 12px;
     opacity: 0.6;
 }
-// ===============================
-// CLEAN SWIPE (MOBILE ONLY)
-// ===============================
 
-let startX = 0;
+/* Caption + location shown below the photo, only in the enlarged/modal view */
+.modal-caption {
+    margin-top: 18px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+}
 
-modalImg.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-}, { passive: true });
+.modal-location {
+    color: white;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 8px;
+}
 
-modalImg.addEventListener("touchend", (e) => {
+.modal-caption-text {
+    margin: 0;
+    color: white;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+    opacity: 0.85;
+}
 
-    let endX = e.changedTouches[0].clientX;
-    let diff = startX - endX;
-
-    // small threshold to avoid accidental taps
-    if (Math.abs(diff) < 50) return;
-
-    if (diff > 0) {
-        // 👉 Swipe LEFT → NEXT
-        currentIndex = (currentIndex + 1) % images.length;
-    } else {
-        // 👉 Swipe RIGHT → PREVIOUS
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
+/* Mobile */
+@media (max-width: 768px) {
+    .modal-content {
+        max-height: 60vh;
     }
 
-    modalImg.src = images[currentIndex].src;
-
-}, { passive: true });
+    .modal-caption-text {
+        font-size: 13px;
+    }
+}

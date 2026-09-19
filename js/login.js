@@ -81,11 +81,21 @@ function logVisitor(name, email) {
     body.set(GOOGLE_FORM_NAME_ENTRY, name);
     body.set(GOOGLE_FORM_EMAIL_ENTRY, email);
 
-    // no-cors: Google Forms doesn't return a readable response either way,
-    // this just fires the submission without blocking on it.
-    fetch(GOOGLE_FORM_ACTION, { method: "POST", mode: "no-cors", body }).catch(
-        (err) => console.warn("Visitor log failed to send:", err)
-    );
+    console.log("[visitor-log] submitting to Google Form:", {
+        url: GOOGLE_FORM_ACTION,
+        [GOOGLE_FORM_NAME_ENTRY]: name,
+        [GOOGLE_FORM_EMAIL_ENTRY]: email,
+    });
+
+    // mode:"no-cors" is required because Google Forms doesn't send CORS
+    // headers back — but that also makes the response opaque, so this can
+    // NEVER tell us whether Google actually accepted it (no readable status,
+    // even on a 400). If entries stop showing up in the form's Responses
+    // tab, check the Network tab for a request named "formResponse" and
+    // read its real status there instead of trusting this console log.
+    fetch(GOOGLE_FORM_ACTION, { method: "POST", mode: "no-cors", body })
+        .then(() => console.log("[visitor-log] fetch resolved (status unreadable under no-cors — verify in the form's Responses tab or the Network tab)"))
+        .catch((err) => console.warn("[visitor-log] fetch failed to even send (network error):", err));
 }
 
 function burstSparkles() {

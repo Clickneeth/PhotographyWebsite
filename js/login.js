@@ -4,13 +4,15 @@
 
 const STORAGE_KEY = "clickneeth_visitor";
 
-// Google Form ("PHOTOGRAPHY website walkin") that logs every visitor so
-// Shankar can see who's walked in. Field IDs confirmed from the form's own
-// page data on 2026-08-10.
-const GOOGLE_FORM_ACTION =
-    "https://docs.google.com/forms/d/e/1FAIpQLSc3B0MB8EI6qJzyGqowDDg1kXUMFXe_JDRrp1rsBbYe2wu4CQ/formResponse";
-const GOOGLE_FORM_NAME_ENTRY = "entry.707596366";
-const GOOGLE_FORM_EMAIL_ENTRY = "entry.1274475095";
+// Apps Script Web App (bound to the "Clickneeth visitors" Sheet) that logs
+// every visitor so Shankar can see who's walked in. Replaced a direct
+// Google Forms POST on 2026-09-19 — Forms' formResponse endpoint requires a
+// per-visit anti-spam token that only exists on a real, freshly-loaded
+// Forms page, so a cross-origin fetch from this site could never satisfy
+// it and was silently rejected 100% of the time. This endpoint is our own
+// script, so it responds with real, readable JSON instead.
+const VISITOR_LOG_ENDPOINT =
+    "https://script.google.com/macros/s/AKfycbweUKj-6cnw5r5qOL82MEKJXnHYkvqQAZHZl6Rx-b0m7WV3tRKj73Of1o8xDNkqHgK-5Q/exec";
 
 const form = document.getElementById("gateForm");
 const mascot = document.getElementById("mascot");
@@ -75,27 +77,27 @@ async function domainAcceptsMail(email) {
 }
 
 function logVisitor(name, email) {
-    if (!GOOGLE_FORM_ACTION || !GOOGLE_FORM_EMAIL_ENTRY) return;
+    if (!VISITOR_LOG_ENDPOINT) return;
 
-    const body = new URLSearchParams();
-    body.set(GOOGLE_FORM_NAME_ENTRY, name);
-    body.set(GOOGLE_FORM_EMAIL_ENTRY, email);
+    console.log("[visitor-log] submitting:", { name, email });
 
-    console.log("[visitor-log] submitting to Google Form:", {
-        url: GOOGLE_FORM_ACTION,
-        [GOOGLE_FORM_NAME_ENTRY]: name,
-        [GOOGLE_FORM_EMAIL_ENTRY]: email,
-    });
-
-    // mode:"no-cors" is required because Google Forms doesn't send CORS
-    // headers back — but that also makes the response opaque, so this can
-    // NEVER tell us whether Google actually accepted it (no readable status,
-    // even on a 400). If entries stop showing up in the form's Responses
-    // tab, check the Network tab for a request named "formResponse" and
-    // read its real status there instead of trusting this console log.
-    fetch(GOOGLE_FORM_ACTION, { method: "POST", mode: "no-cors", body })
-        .then(() => console.log("[visitor-log] fetch resolved (status unreadable under no-cors — verify in the form's Responses tab or the Network tab)"))
-        .catch((err) => console.warn("[visitor-log] fetch failed to even send (network error):", err));
+    // No mode:"no-cors" needed here — this is our own Apps Script endpoint
+    // and it responds with real CORS headers, so unlike the old Google
+    // Forms integration we can actually read whether it succeeded.
+    fetch(VISITOR_LOG_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ name, email }),
+    })
+        .then((res) => res.json())
+        .then((result) => {
+            if (result.ok) {
+                console.log("[visitor-log] saved successfully");
+            } else {
+                console.warn("[visitor-log] server rejected the entry:", result.error);
+            }
+        })
+        .catch((err) => console.warn("[visitor-log] failed to send:", err));
 }
 
 function burstSparkles() {

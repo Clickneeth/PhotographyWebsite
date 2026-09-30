@@ -24,7 +24,7 @@ body {
     text-align: center;
 }
 
-/* ================= MASCOT STAGE (Pikachu-style, fan art — Pokémon property) ================= */
+/* ================= MASCOT STAGE (Blip — Clickneeth's original mascot) ================= */
 
 .mascot-stage {
     position: relative;
@@ -40,7 +40,7 @@ body {
     top: 55%;
     width: 150px;
     height: 150px;
-    background: radial-gradient(circle, rgba(253, 210, 60, 0.22) 0%, rgba(253, 210, 60, 0) 70%);
+    background: radial-gradient(circle, rgba(244, 185, 66, 0.22) 0%, rgba(244, 185, 66, 0) 70%);
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
@@ -68,7 +68,7 @@ body {
 .mascot .pika-tail-yellow,
 .mascot .pika-leg-left,
 .mascot .pika-leg-right {
-    fill: #FDD23C;
+    fill: #F7F6F2;
     stroke: #171614;
     stroke-width: 4.5px;
     stroke-linejoin: round;
@@ -87,18 +87,18 @@ body {
 }
 
 .mascot .pika-tail-brown {
-    fill: #7A4B22;
+    fill: #2B2B2B;
     stroke: #171614;
     stroke-width: 4.5px;
     stroke-linejoin: round;
 }
 
 .mascot .pika-stripe {
-    fill: #7A4B22;
+    fill: #f4b942;
 }
 
 .mascot .pika-cheek {
-    fill: #F1462F;
+    fill: #f4b942;
 }
 
 .mascot .eye-normal,
@@ -123,7 +123,7 @@ body {
 }
 
 .mascot .pika-mouth-inner {
-    fill: #E8453B;
+    fill: #C98A2E;
 }
 
 /* ---- idle micro-motion: tail sway + ear twitch ---- */
@@ -244,7 +244,7 @@ body {
     top: 50%;
     width: 6px;
     height: 6px;
-    background: #FDD23C;
+    background: #f4b942;
     border-radius: 50%;
     opacity: 0;
     animation: sparkleOut 0.9s ease-out forwards;

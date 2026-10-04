@@ -196,3 +196,53 @@ function authorizeOnce() {
   SpreadsheetApp.getActiveSpreadsheet().getName();
   UrlFetchApp.fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { muteHttpExceptions: true });
 }
+
+// ---------------------------------------------------------------------------
+// Data retention & erasure (DPDP). NOT part of the web app — run these by hand
+// from the Apps Script editor.
+// ---------------------------------------------------------------------------
+
+var RETENTION_YEARS = 2;
+
+// Emails you a count + row numbers of visitors older than RETENTION_YEARS so you
+// can review and delete them. Contains no names or emails. Never deletes anything.
+function retentionReport() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  var cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - RETENTION_YEARS);
+  var times = sheet.getRange(2, 1, Math.max(sheet.getLastRow() - 1, 1), 1).getValues();
+  var rows = [];
+  for (var i = 0; i < times.length; i++) {
+    if (times[i][0] instanceof Date && times[i][0] < cutoff) rows.push(i + 2);
+  }
+  if (!rows.length) return;
+  MailApp.sendEmail(
+    Session.getEffectiveUser().getEmail(),
+    "Clickneeth: " + rows.length + " visitor row(s) past " + RETENTION_YEARS + " years",
+    "These rows in \"" + sheet.getName() + "\" are older than " + RETENTION_YEARS +
+    " years and are due for deletion under your privacy notice:\n\nRows: " + rows.join(", ")
+  );
+}
+
+// Run ONCE to get the retention reminder emailed on the 1st of every month.
+function setupRetentionReminder() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === "retentionReport") ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger("retentionReport").timeBased().onMonthDay(1).atHour(9).create();
+}
+
+// Erasure request: put the visitor's email below, then run eraseVisitor().
+// Deletes every row with that email and tells you how many it removed.
+function eraseVisitor() {
+  var EMAIL_TO_ERASE = "";   // <- e.g. "someone@example.com"
+  var email = EMAIL_TO_ERASE.trim().toLowerCase();
+  if (!email) throw new Error("Set EMAIL_TO_ERASE first.");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  var values = sheet.getRange(2, 3, Math.max(sheet.getLastRow() - 1, 1), 1).getValues(); // column C = Email
+  var removed = 0;
+  for (var i = values.length - 1; i >= 0; i--) {
+    if (String(values[i][0]).trim().toLowerCase() === email) { sheet.deleteRow(i + 2); removed++; }
+  }
+  Logger.log("Erased " + removed + " row(s) for " + email);
+}

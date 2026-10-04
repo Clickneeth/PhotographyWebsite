@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://clickneeth.github.io/PhotographyWebsite/sitemap.xml
+Sitemap: https://clickneeth.click/sitemap.xml

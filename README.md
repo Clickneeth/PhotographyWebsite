@@ -1,7 +1,7 @@
 # Clickneeth — photography portfolio
 
 Static site (plain HTML/CSS/JS) served by GitHub Pages:
-https://clickneeth.github.io/PhotographyWebsite/
+https://clickneeth.click/
 
 - `index.html` — entry gate: name + email, consent, Cloudflare Turnstile, emailed code
 - `gallery.html` — the portfolio (photos come from `gallery.json`, web copies in `assets/web/`)

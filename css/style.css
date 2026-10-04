@@ -13,7 +13,8 @@ body {
 /* ================= HERO ================= */
 
 .hero {
-    min-height: 38vh;   /* 🔥 FIXED (not fixed height) */
+    min-height: 100vh;
+    min-height: 100svh;   /* full screen on desktop and mobile */
     background: #000;
     color: silver;
     display: flex;
@@ -21,19 +22,6 @@ body {
     align-items: center;
     text-align: center;
     padding: 50px 20px 20px;   /* 🔥 prevents clipping */
-}
-
-.hero-content {
-    opacity: 0;
-    transform: translateY(40px);
-    animation: heroFade 1.5s ease forwards;
-}
-
-@keyframes heroFade {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .logo {
@@ -49,6 +37,46 @@ body {
     color: silver;
     opacity: 0.7;
     line-height: 1.6;
+}
+
+/* ================= MARQUEE ================= */
+
+.marquee-section {
+    background: #000;
+    overflow: hidden;
+    padding: 22px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.marquee-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.marquee-track img {
+    height: 150px;
+    width: auto;
+    flex-shrink: 0;
+    border-radius: 8px;
+    margin-right: 14px;
+    filter: grayscale(20%);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.marquee-track img:hover {
+    filter: grayscale(0%);
+    transform: scale(1.04);
+}
+
+@media (max-width: 768px) {
+    .marquee-track img {
+        height: 100px;
+        margin-right: 10px;
+    }
+
 }
 
 /* ================= ABOUT ================= */
@@ -138,6 +166,13 @@ body {
     transition: transform 0.4s ease;
 }
 
+.gallery-item img:focus-visible,
+.close:focus-visible,
+.arrow:focus-visible {
+    outline: 2px solid #f4b942;
+    outline-offset: 3px;
+}
+
 .gallery-item img:hover {
     transform: scale(1.03);
 }
@@ -160,6 +195,68 @@ body {
 
     .gallery-item {
         margin-bottom: 12px;
+    }
+}
+
+/* ================= SPECIAL MENTIONS ================= */
+
+.mentions {
+    background: #000;
+    overflow: hidden;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mentions-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 8px;
+}
+
+.mentions-track span,
+.mentions-track a {
+    flex-shrink: 0;
+    font-size: 15px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: silver;
+    white-space: nowrap;
+    padding-right: 40px;
+}
+
+.mentions-track .mentions-label {
+    opacity: 0.8;
+}
+
+.mentions-track a {
+    text-decoration: none;
+    border-bottom: 1px solid rgba(192, 192, 192, 0.4);
+    padding-right: 0;
+    margin-right: 40px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.mentions-track span:last-child {
+    padding-right: 0;
+}
+
+.mentions-track a:hover {
+    color: #fff;
+    border-color: #fff;
+}
+
+.mentions-track .mentions-dot {
+    opacity: 0.35;
+}
+
+@media (max-width: 768px) {
+    .mentions-track span,
+    .mentions-track a {
+        font-size: 12px;
+        letter-spacing: 3px;
     }
 }
 
@@ -205,6 +302,94 @@ body {
 .feedback-btn:hover {
     background: white;
     color: black;
+}
+
+/* ================= FOOTER ================= */
+
+.site-footer {
+    background: #000;
+    color: silver;
+    text-align: center;
+    padding: 56px 20px 34px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 9px;
+    color: silver;
+    opacity: 0.9;
+    margin-bottom: 22px;
+}
+
+.footer-contact {
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin-bottom: 22px;
+}
+
+.footer-contact a {
+    color: silver;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.3s ease;
+}
+
+.footer-contact a:hover {
+    opacity: 1;
+}
+
+.footer-divider {
+    margin: 0 12px;
+    opacity: 0.35;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+    margin-bottom: 28px;
+}
+
+.footer-links a {
+    color: silver;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    border-color: silver;
+}
+
+.footer-copy {
+    font-size: 11px;
+    letter-spacing: 1px;
+    opacity: 0.65;
+}
+
+@media (max-width: 768px) {
+    .footer-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .footer-divider {
+        display: none;
+    }
 }
 
 /* ================= MODAL ================= */
@@ -282,6 +467,7 @@ body {
 .arrow.hidden {
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;   /* also removes it from keyboard focus and screen readers */
 }
 
 #prev { left: 20px; }

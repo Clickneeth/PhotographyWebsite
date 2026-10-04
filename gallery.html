@@ -55,6 +55,7 @@
 </head>
 <body>
 
+<main id="main">
 <!-- HERO -->
 <section class="hero">
     <div class="hero-content">
@@ -89,6 +90,13 @@
     <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
+<!-- SPECIAL MENTIONS -->
+<section class="mentions" aria-label="Special mentions">
+    <div class="mentions-track">
+        <span class="mentions-label">Special Mentions</span><span class="mentions-dot">✦</span><a href="https://www.instagram.com/armindha_gladia/" target="_blank" rel="noopener">Armindha Gladia</a><span class="mentions-dot">✦</span><span>Srijita Majumder</span>
+    </div>
+</section>
+
 <!-- FEEDBACK SECTION -->
 <section class="feedback">
     <div class="feedback-content">
@@ -106,11 +114,34 @@
     </div>
 </section>
 
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <h3 class="footer-logo">CLICKNEETH</h3>
+
+        <div class="footer-contact">
+            <a href="mailto:shankarpraneeth12@gmail.com">shankarpraneeth12@gmail.com</a>
+            <span class="footer-divider">&middot;</span>
+            <a href="tel:+919866777647">+91 98667 77647</a>
+        </div>
+
+        <div class="footer-links">
+            <a href="https://github.com/Clickneeth" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://linkedin.com/in/shankarpraneeth" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+
+        <p class="footer-copy">&copy; <span id="footerYear"></span> Clickneeth. All rights reserved.</p>
+    </div>
+</footer>
+
 <!-- MODAL -->
-<div class="modal" id="modal">
-    <span class="close">&times;</span>
-    <span class="arrow" id="prev">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <span class="close" role="button" tabindex="0" aria-label="Close photo viewer">&times;</span>
+    <span class="arrow" id="prev" role="button" tabindex="0" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
     </span>
     <div class="modal-inner">
         <img class="modal-content" id="modalImg">
@@ -120,8 +151,8 @@
         </div>
     </div>
     <div class="signature">© CLICKNEETH</div>
-    <span class="arrow" id="next">
-        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    <span class="arrow" id="next" role="button" tabindex="0" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </span>
 </div>
 

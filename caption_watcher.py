@@ -73,8 +73,12 @@ def caption_image(image_path: Path) -> str:
     return resp.json().get("response", "").strip()
 
 
+COPYRIGHT_NOTICE = "Copyright (c) Shankar Praneeth / Clickneeth. All rights reserved."
+
+
 def strip_metadata(path: Path) -> None:
-    """Remove EXIF (GPS location, camera details) from a published JPEG, losslessly."""
+    """Remove EXIF (GPS location, camera details) from a published JPEG, losslessly,
+    then stamp only the artist + copyright notice back in."""
     if path.suffix.lower() not in {".jpg", ".jpeg"}:
         return
     if piexif is None:
@@ -82,6 +86,10 @@ def strip_metadata(path: Path) -> None:
         return
     try:
         piexif.remove(str(path))
+        piexif.insert(piexif.dump({"0th": {
+            piexif.ImageIFD.Artist: "Shankar Praneeth",
+            piexif.ImageIFD.Copyright: COPYRIGHT_NOTICE,
+        }}), str(path))
     except Exception as exc:  # noqa: BLE001
         notify("Portfolio Caption", f"Couldn't strip EXIF from {path.name}: {exc}")
 

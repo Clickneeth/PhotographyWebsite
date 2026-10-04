@@ -10,38 +10,9 @@ fetch("gallery.json")
     .then(data => {
         galleryData = data;
         renderGallery();
-        renderMarquee();
         setupModal();
     })
     .catch(err => console.error("Failed to load gallery.json:", err));
-
-// ===============================
-// MARQUEE (decorative, static strip)
-// ===============================
-
-function renderMarquee() {
-
-    const track = document.getElementById("marqueeTrack");
-    if (!track) return;
-
-    // A lighter subset keeps the strip fast to load; every 3rd photo gives
-    // a good spread across the full gallery instead of just the first N.
-    const subset = galleryData.filter((_, i) => i % 3 === 0).slice(0, 18);
-    if (subset.length === 0) return;
-
-    const buildSet = () => {
-        subset.forEach(entry => {
-            const img = document.createElement("img");
-            img.src = `assets/${entry.file}`;
-            img.loading = "lazy";
-            img.alt = entry.caption || "";
-            track.appendChild(img);
-        });
-    };
-
-    buildSet();
-
-}
 
 // ===============================
 // FOOTER YEAR
@@ -58,7 +29,13 @@ function renderGallery() {
         item.classList.add("gallery-item");
 
         const img = document.createElement("img");
-        img.src = `assets/${entry.file}`;
+        // Web-sized WebP copy (smaller download); width/height reserve the
+        // photo's space up front so the page doesn't jump while it loads.
+        img.src = `assets/web/${entry.file.replace(/\.[^.]+$/, "")}.webp`;
+        if (entry.w && entry.h) {
+            img.width = entry.w;
+            img.height = entry.h;
+        }
         img.loading = "lazy";
         // alt text only (accessibility/SEO) — no title attribute, so no hover
         // tooltip leaks the caption in the normal grid view.

@@ -2,3 +2,7 @@ venv/
 drop/
 *.log
 .DS_Store
+.vscode/
+caption_watcher.py
+Caption File.md
+CAPTION_WATCHER_README.md

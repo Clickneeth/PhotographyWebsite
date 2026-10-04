@@ -7,6 +7,7 @@
 <meta name="description" content="Clickneeth is the travel, portrait, and architecture photography portfolio of Shankar Praneeth — real moments captured across Rajasthan, India and beyond, frozen in time.">
 <meta name="keywords" content="Clickneeth, Shankar Praneeth, photography portfolio, travel photography India, portrait photography, Rajasthan photography, street photography">
 <meta name="author" content="Shankar Praneeth">
+<meta name="copyright" content="© Shankar Praneeth / Clickneeth. All rights reserved.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://clickneeth.github.io/PhotographyWebsite/">
 
@@ -27,6 +28,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/login.css">
+<script src="js/protect.js"></script>
 </head>
 <body>
 
@@ -136,7 +138,10 @@
     <p class="error" id="formError" aria-live="assertive"></p>
   </form>
 
+  <p class="gate-copy">&copy; <span id="gateYear"></span> Shankar Praneeth / Clickneeth. All photographs are protected by copyright. All rights reserved.</p>
+
 </main>
+<script>document.getElementById("gateYear").textContent = new Date().getFullYear();</script>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script src="js/login.js"></script>

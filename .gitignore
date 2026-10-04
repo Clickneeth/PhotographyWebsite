@@ -1,0 +1,4 @@
+venv/
+drop/
+*.log
+.DS_Store

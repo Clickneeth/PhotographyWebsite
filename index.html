@@ -110,12 +110,35 @@
       <span>Email</span>
       <input type="email" id="visitorEmail" name="email" autocomplete="email" required>
     </label>
+    <div class="consent-notice" id="consentNotice">
+      <strong>Before you enter</strong>
+      <ul>
+        <li><b>We collect:</b> your name and email.</li>
+        <li><b>Why:</b> to verify you're real and keep a visitor list &mdash; nothing else.</li>
+        <li><b>Cookies:</b> none of our own. No ads, no tracking, so no cookie banner.</li>
+        <li><b>Your rights:</b> access, correct, erase or withdraw anytime &mdash; see the <a href="privacy.html" target="_blank" rel="noopener">Privacy Notice</a>.</li>
+      </ul>
+    </div>
+    <label class="consent" id="consentRow">
+      <input type="checkbox" id="consentBox">
+      <span>I am 18 or older and I agree to Clickneeth collecting my name and email to verify me and keep a visitor record, as described in the <a href="privacy.html" target="_blank" rel="noopener">Privacy Notice</a>. I can withdraw this at any time.</span>
+    </label>
+    <label class="field code-field" id="codeField" hidden>
+      <span>Verification code</span>
+      <input type="text" id="visitorCode" name="code" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="8">
+    </label>
+    <div id="captchaBox" class="captcha-box"></div>
     <button type="submit" class="gate-btn">Introduce yourself</button>
+    <div class="code-links" id="codeLinks" hidden>
+      <button type="button" id="resendBtn" class="link-btn">Resend code</button>
+      <button type="button" id="changeEmailBtn" class="link-btn">Change email</button>
+    </div>
     <p class="error" id="formError" aria-live="assertive"></p>
   </form>
 
 </main>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script src="js/login.js"></script>
 </body>
 </html>

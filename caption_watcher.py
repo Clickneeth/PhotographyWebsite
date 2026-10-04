@@ -10,6 +10,11 @@ import time
 from pathlib import Path
 
 import requests
+
+try:
+    import piexif
+except ImportError:  # pip install piexif
+    piexif = None
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -68,6 +73,19 @@ def caption_image(image_path: Path) -> str:
     return resp.json().get("response", "").strip()
 
 
+def strip_metadata(path: Path) -> None:
+    """Remove EXIF (GPS location, camera details) from a published JPEG, losslessly."""
+    if path.suffix.lower() not in {".jpg", ".jpeg"}:
+        return
+    if piexif is None:
+        notify("Portfolio Caption", f"piexif missing - {path.name} still has EXIF/GPS")
+        return
+    try:
+        piexif.remove(str(path))
+    except Exception as exc:  # noqa: BLE001
+        notify("Portfolio Caption", f"Couldn't strip EXIF from {path.name}: {exc}")
+
+
 def process_image(path: Path) -> None:
     if path.suffix.lower() not in IMAGE_EXTS:
         return
@@ -94,6 +112,7 @@ def process_image(path: Path) -> None:
     new_name = f"{idx}{path.suffix.lower()}"
     dest = ASSETS_DIR / new_name
     shutil.move(str(path), str(dest))
+    strip_metadata(dest)
 
     gallery.append({"file": new_name, "caption": caption})
     save_gallery(gallery)

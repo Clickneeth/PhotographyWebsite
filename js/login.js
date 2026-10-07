@@ -120,17 +120,76 @@ async function takeCaptchaToken() {
 
 initCaptcha();
 
-async function callGate(payload) {
+const GATE_TIMEOUT_MS = 20000;
+
+// One attempt. Failures come back as distinct error codes so the visitor (and
+// we) can tell "can't reach Google" from "Google answered with junk":
+//   net_offline  — browser reports no connection
+//   net_blocked  — fetch itself failed (network/DNS filter, ad-blocker, in-app browser…)
+//   net_timeout  — no answer within GATE_TIMEOUT_MS
+//   net_response — got a reply, but it wasn't the JSON we expect
+async function gateAttempt(payload) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), GATE_TIMEOUT_MS);
     try {
         const res = await fetch(GATE_ENDPOINT, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload),
+            signal: controller.signal,
         });
-        return await res.json();
+        try {
+            return await res.json();
+        } catch (parseErr) {
+            console.warn("[gate] non-JSON reply, HTTP", res.status, parseErr);
+            return { ok: false, error: "net_response", detail: `HTTP ${res.status}` };
+        }
     } catch (err) {
         console.warn("[gate] request failed:", err);
-        return { ok: false, error: "network" };
+        if (err && err.name === "AbortError") return { ok: false, error: "net_timeout" };
+        if (navigator.onLine === false) return { ok: false, error: "net_offline" };
+        return { ok: false, error: "net_blocked", detail: String(err && err.message || err) };
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+const RETRYABLE = new Set(["net_blocked", "net_timeout", "net_response"]);
+
+// Retries once on a transport failure (Google occasionally drops a request or
+// serves a transient error page). `retried` is set so callers can tell that the
+// first attempt may actually have gone through.
+async function callGate(payload) {
+    let result = await gateAttempt(payload);
+    if (!result.ok && RETRYABLE.has(result.error)) {
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        const second = await gateAttempt(payload);
+        result = second.ok || !RETRYABLE.has(second.error) ? second : result;
+        result.retried = true;
+    }
+    return result;
+}
+
+// Short hint appended to network errors when we can see the page is inside an
+// app's built-in browser, which often blocks the sign-in request.
+function inAppBrowserHint() {
+    return /FBAN|FBAV|Instagram|WhatsApp|Line\/|MicroMessenger|Snapchat|Twitter|LinkedInApp/i.test(navigator.userAgent)
+        ? " You're in an app's built-in browser — open this page in Chrome or Safari instead."
+        : "";
+}
+
+function networkMessage(code) {
+    const hint = inAppBrowserHint();
+    switch (code) {
+        case "net_offline":
+            return "You seem to be offline. Check your connection and try again.";
+        case "net_timeout":
+            return `Blip took too long to answer. Try again in a moment. (E-TIMEOUT)${hint}`;
+        case "net_response":
+            return `Blip got an unexpected reply. Try again in a minute. (E-RESPONSE)${hint}`;
+        default:
+            return "Couldn't reach Blip. Your network, VPN or an ad-blocker may be blocking script.google.com — " +
+                `try mobile data, another browser, or turn the blocker off. (E-BLOCKED)${hint}`;
     }
 }
 
@@ -169,12 +228,10 @@ const SEND_ERRORS = {
     quota_exhausted: "Blip has sent too many codes today. Please try again tomorrow.",
     consent_required: "Please agree to the Privacy Notice to continue.",
     captcha_failed: "The human check didn't pass — please try again.",
-    network: "Couldn't reach Blip. Check your connection and try again.",
 };
 const VERIFY_ERRORS = {
     expired: "That code has expired — tap Resend code for a new one.",
     too_many_attempts: "Too many wrong tries — tap Resend code for a new one.",
-    network: "Couldn't reach Blip. Check your connection and try again.",
 };
 
 let step = "details"; // "details" -> "code"
@@ -256,9 +313,17 @@ async function requestCode(name, email) {
     mascot.classList.remove("checking");
     submitBtn.disabled = false;
 
+    // If our first attempt's reply was lost but the server did send the code,
+    // the automatic retry is answered "too soon" — that means it worked.
+    if (!result.ok && result.retried && result.error === "too_soon") return true;
+
     if (!result.ok) {
         caption.textContent = step === "code" ? caption.textContent : IDLE_CAPTION;
-        showError(SEND_ERRORS[result.error] || "Blip couldn't send a code to that email — double-check it.");
+        showError(
+            result.error.startsWith("net_")
+                ? networkMessage(result.error)
+                : SEND_ERRORS[result.error] || "Blip couldn't send a code to that email — double-check it."
+        );
         return false;
     }
     return true;
@@ -313,7 +378,11 @@ form.addEventListener("submit", async (e) => {
         if (result.error === "wrong_code") {
             showError(`That code isn't right — ${result.triesLeft} ${result.triesLeft === 1 ? "try" : "tries"} left.`);
         } else {
-            showError(VERIFY_ERRORS[result.error] || "Couldn't verify that code — try again.");
+            showError(
+                result.error.startsWith("net_")
+                    ? networkMessage(result.error)
+                    : VERIFY_ERRORS[result.error] || "Couldn't verify that code — try again."
+            );
         }
         return;
     }
